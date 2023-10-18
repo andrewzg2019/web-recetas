@@ -6,6 +6,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const recipeModal = document.getElementById("recipe-modal");
     const recipeForm = document.getElementById("recipe-form");
     const closeModal = document.getElementsByClassName("close")[0];
+    const slides = document.querySelectorAll(".slide");
+    let currentSlide = 0;
+
+    function showSlide(slideIndex) {
+        slides.forEach((slide, index) => {
+            if (index === slideIndex) {
+                slide.style.display = "block";
+            } else {
+                slide.style.display = "none";
+            }
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    showSlide(currentSlide);
+    setInterval(nextSlide, 5000); // Cambiar de diapositiva cada 5 segundos
 
     // Función para filtrar recetas por nombre
     searchInput.addEventListener("input", function () {
