@@ -1,64 +1,61 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recetas Culinarias</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#recetas">Recetas</a></li>
-                <li><a href="#nosotros">Sobre Nosotros</a></li>
-            </ul>
-        </nav>
-    </header>
-    
-    <main>
-        <section id="inicio">
-            <h1>Bienvenido a Recetas Culinarias</h1>
-            <p>Encuentra las mejores recetas para deleitar tu paladar.</p>
-        </section>
-        
-        <section id="recetas">
-            <h2>Recetas</h2>
-            <input type="text" id="search" placeholder="Buscar recetas por nombre">
-            <div id="recipes-list">
-                <!-- Aquí se mostrarán las recetas dinámicamente -->
-            </div>
-        </section>
-        
-        <section id="nosotros">
-            <h2>Sobre Nosotros</h2>
-            <p>Somos amantes de la cocina y nos encanta compartir nuestras mejores recetas contigo.</p>
-        </section>
-    </main>
+document.addEventListener("DOMContentLoaded", function () {
+    const recipes = JSON.parse(localStorage.getItem("recipes")) || [];
+    const recipeList = document.getElementById("recipes-list");
+    const searchInput = document.getElementById("search");
+    const addRecipeButton = document.getElementById("add-recipe-button");
+    const recipeModal = document.getElementById("recipe-modal");
+    const recipeForm = document.getElementById("recipe-form");
+    const closeModal = document.getElementsByClassName("close")[0];
 
-    <footer>
-        <p>&copy; 2023 Recetas Culinarias</p>
-    </footer>
+    // Función para filtrar recetas por nombre
+    searchInput.addEventListener("input", function () {
+    const searchValue = searchInput.value.toLowerCase();
+    const filteredRecipes = recipes.filter(recipe => recipe.name.toLowerCase().includes(searchValue));
+    displayRecipes(filteredRecipes);
+});
 
-    <button id="add-recipe-button">Añadir Receta</button>
+// Función para mostrar las recetas en la página
+function displayRecipes(filteredRecipes = []) {
+    recipeList.innerHTML = "";
+    const recipesToDisplay = filteredRecipes.length > 0 ? filteredRecipes : recipes;
 
-    <div id="recipe-modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Añadir Receta</h2>
-            <form id="recipe-form">
-                <label for="recipe-name">Nombre de la receta:</label>
-                <input type="text" id="recipe-name" required>
-                <label for="ingredients">Ingredientes:</label>
-                <textarea id="ingredients" required></textarea>
-                <label for="instructions">Instrucciones:</label>
-                <textarea id="instructions" required></textarea>
-                <button type="submit">Guardar</button>
-            </form>
-        </div>
-    </div>
+    recipesToDisplay.forEach((recipe, index) => {
+        const recipeItem = document.createElement("div");
+        recipeItem.innerHTML = `
+            <h3>${recipe.name}</h3>
+            <p>Ingredientes: ${recipe.ingredients}</p>
+            <p>Instrucciones: ${recipe.instructions}</p>
+        `;
+        recipeList.appendChild(recipeItem);
+    });
+}
 
-    <script src="script.js"></script>
-</body>
-</html>
+displayRecipes();
+
+
+    // Mostrar el formulario modal
+    addRecipeButton.addEventListener("click", function () {
+        recipeModal.style.display = "block";
+    });
+
+    // Cerrar el formulario modal
+    closeModal.addEventListener("click", function () {
+        recipeModal.style.display = "none";
+    });
+
+    // Agregar una nueva receta
+    recipeForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const name = document.getElementById("recipe-name").value;
+        const ingredients = document.getElementById("ingredients").value;
+        const instructions = document.getElementById("instructions").value;
+
+        if (name && ingredients && instructions) {
+            recipes.push({ name, ingredients, instructions });
+            localStorage.setItem("recipes", JSON.stringify(recipes));
+            displayRecipes();
+            recipeForm.reset();
+            recipeModal.style.display = "none";
+        }
+    });
+});
