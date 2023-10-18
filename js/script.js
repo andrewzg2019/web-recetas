@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     showSlide(currentSlide);
-    setInterval(nextSlide, 5000); // Cambiar de diapositiva cada 5 segundos
+    setInterval(nextSlide, 5000);
 
     // Función para filtrar recetas por nombre
     searchInput.addEventListener("input", function () {
