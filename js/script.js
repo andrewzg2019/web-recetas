@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const slides = document.querySelectorAll(".slide");
     let currentSlide = 0;
 
+    // Función para mostrar Slider
     function showSlide(slideIndex) {
         slides.forEach((slide, index) => {
             if (index === slideIndex) {
